@@ -1,0 +1,644 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+
+    <!--For bootstrap, import:-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!--For icons, import:-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script th:src="@{'/javascripts/topicNameUniquePerUser.js'}"></script>
+    <script th:src="@{'/javascripts/changeSeriousness.js'}"></script>
+    <script th:src="@{'/javascripts/editTopicName.js'}"></script>
+    <script th:src="@{'/javascripts/changeVisibility.js'}"></script>
+
+
+    <style>
+        .bottom-part {
+            padding-left: 5%;
+            padding-right: 5%;
+        }
+
+        .form-control {
+            max-width: 60%;
+        }
+
+        .btn {
+            float: right;
+        }
+
+        .pic-class {
+            width: 80px;
+            height: 80px;
+        }
+
+        .panel-body {
+            padding-left: 3%;
+            padding-right: 3%;
+        }
+
+        button.btn-a-link {
+            border: none;
+            background: transparent;
+            color: #18BC9C;
+            margin-left: -10px;
+        }
+    </style>
+
+</head>
+<body>
+<!--
+//<form class="form-inline my-2 my-lg-0" id="search-part" action="/searchTopic" method="post">
+    <input class="form-control mr-sm-2" type="text" placeholder="Search" id="search-topic-resource"
+           name="topic">
+    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+</form>-->
+<div th:if="${session.user!=null}">
+
+    <div class="top-box-border">
+        <nav class="navbar" style="margin-bottom:-20px; border: 2px solid; border-radius: 10px; ">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/dashboard">Link Sharing</a>
+                </div>
+
+                <span class="navbar-form navbar-right">
+                    <!--<form name="searchForm" id="search-part" action="/searchTopic" method="post">-->
+
+                        <input type="text" class="form-control" placeholder="search" id="search-topic-resource" name="topic" style="margin-left:0px ">
+                        <a href="" onclick="this.href='/searchTopic/'+document.getElementById('search-topic-resource').value" class="glyphicon glyphicon-search"
+                                style=" margin-left: -20px; background-color: transparent; border: none;"></a>
+                   <!-- </form>-->
+
+        <span class="glyphicon glyphicon-comment" data-toggle="modal" data-target="#myModal1"
+              title="CreateTopic"></span>
+
+        <span class="glyphicon glyphicon-envelope" data-toggle="modal" data-target="#myModal2"
+              title="SendInvitation"></span>
+
+        <span class="glyphicon glyphicon-paperclip" data-toggle="modal" data-target="#myModal3"
+              title="ShareLink"></span>
+
+        <span class="fa fa-file-text" data-toggle="modal" data-target="#myModal4" title="ShareDocument"></span>
+
+        <span style="">
+                    <img th:src="${session.user.photo}" height="20px" width="20px" class="avatar img-circle"/>
+        </span>
+
+
+
+    <span>
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"
+            style="background-color: transparent; border: none;">
+        <span th:text="${session.user.firstName}"></span>
+    <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+
+      <li><a href="/userProfile">Profile</a></li>
+      <li th:if="${session.user.isAdmin}"><a href="/usersRecord">Users</a></li>
+      <li><a href="/post">Posts</a></li>
+        <li><a href="/viewAllTopics">Topics</a></li>
+      <li><a href="/logoutUser">Logout</a></li>
+    </ul>
+
+          </span>
+        </span>
+            </div>
+        </nav>
+    </div>
+
+
+    <br>
+    <br>
+    <div class="panel-body bg-secondary text-center">
+        <span th:text="${message}"></span>
+    </div>
+
+
+    <!-----------------------------Bottom part of page---------------------------->
+
+    <div class="bottom-part">
+
+        <div class="row">
+            <div class="col-md-6">
+
+                <!----------------------Coding for the panel "Recent shares" from here----------------->
+
+                <div class="panel panel-default">
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <img class="pic-class" th:src="${session.user.photo}" ;>
+                            </div>
+
+                            <div class="col-md-10">
+                                <a href="/userProfile"
+                                   th:text="${session.user.firstName} + ' ' + ${session.user.lastName}"></a>
+                                <p th:text="${session.user.userName}"></p>
+                                <table style="width: 50%">
+                                    <tr>
+                                        <th>
+                                            <font size=2px> Subscriptions</font>
+                                        </th>
+                                        <th>
+                                            <font size=2px> Topics</font>
+
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p size=2px style="color:blue"
+                                               th:text="${session.topicSubscribedCount}"></p>
+                                        </td>
+                                        <td>
+                                            <p size=2px style="color:blue" th:text="${session.topicsCreatedCount}"></p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-------------------------Coding for "Subscriptions" panel here------------------------->
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Subscriptions
+
+                        <a href="#" style="float:right">View All</a>
+                    </div>
+                    <div class="panel-body" th:each="topic,i : ${session.topicSubscribed}">
+                        <div class="row" th:id="${topic.topicId}">
+                            <div class="col-md-2">
+                                <img class="pic-class" th:src="@{${topic.user.photo}}"/>
+                            </div>
+
+                            <div class="col-md-10">
+                                <span class="old-topic-name" th:classappend="'old-topic-name'+${topic.topicId}">
+                                    <a th:href="@{/topic/{id}(id=${topic.topicId})}" th:text="${topic.topicName}"
+                                       th:class="'old-topic'+${topic.topicId}"> Grails</a></span>
+
+                                <div class="new-topic-name" th:classappend="'new-topic-name'+${topic.topicId}" style="display: none; ">
+                                    <div class="form-inline my-2 my-lg-0">
+                                        <input class="new-topic-name-text form-control mr-sm-2" type="text" placeholder="topic">
+                                        <!--<div th:class="newtname-msg"></div>-->
+                                        <button style="display: inline-block" th:topic-id-attr="${topic.getTopicId()}"class="save-new-topic-name btn btn-primary my-2 my-sm-0" type="button">Save</button>
+                                        <button style="display: inline-block" type="button" class="close-topic-edit btn btn-primary my-2 my-sm-0">Close</button>
+                                    </div>
+                                </div>
+
+
+                                <table style="border-spacing:5%;width: 50%;">
+                                    <tr>
+                                        <th>
+                                            <font size=2px th:text="${topic.user.userName}"> @uday</font>
+                                        </th>
+
+                                        <th style="display:inline-block ;margin-left: 50px;">
+                                            <font size=2px> Subscriptions</font>
+                                        </th>
+                                        <th>
+                                            <font size=2px> Posts</font>
+
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <a th:href="@{/unsubscribeFromDashboard/{topicId}(topicId=${topic.topicId})}"
+                                               th:unless="${session.user.userId} == ${topic.user.userId}" style="margin-right:-50px; display: inline-block">
+                                                Unsubscribe</a>
+                                        </td>
+                                        <td style="display:inline-block ;margin: 0px 150px 0px 50px">
+                                            <font size=2px style="color:blue" th:text="${topic.subscribers.size()}">
+                                                50</font>
+                                        </td>
+                                        <td>
+                                            <font size=2px style="color:blue" th:text="${topic.resources.size()}">
+                                                30</font>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br>
+                                <span th:each="subscription:${session.AllSubscriptionTopic} ">
+                                    <span th:if="${subscription.topic.topicId} == ${topic.topicId} and ${subscription.user.userId} == ${session.user.userId}">
+<!--
+                                        <span th:with="serious = ${subscription.seriousness}" th:text="${serious}"></span>
+-->
+
+                                <select th:topic-id="${topic.topicId}"
+                                        class="newseriousness" name="newseriousness"
+                                        th:if="${topic.user.userId==session.user.userId}" disabled>
+                                    <option value="SERIOUS"
+                                            th:selected="${subscription.seriousness==session.seriousnessTypes[1]}">serious</option>
+                                    <option value="CASUAL"
+                                            th:selected="${subscription.seriousness==session.seriousnessTypes[0]}">casual</option>
+                                    <option value="VERY_SERIOUS"
+                                            th:selected="${subscription.seriousness==session.seriousnessTypes[2]}">very serious</option>
+                                </select>
+
+                                        <select th:topic-id="${topic.topicId}"
+                                                class="newseriousness" name="newseriousness"
+                                                th:unless="${topic.user.userId==session.user.userId}">
+                                    <option value="SERIOUS"
+                                            th:selected="${subscription.seriousness==session.seriousnessTypes[1]}">serious</option>
+                                    <option value="CASUAL"
+                                            th:selected="${subscription.seriousness==session.seriousnessTypes[0]}">casual</option>
+                                    <option value="VERY_SERIOUS"
+                                            th:selected="${subscription.seriousness==session.seriousnessTypes[2]}">very serious</option>
+                                </select>
+                                    </span>
+                                    <!--
+                                                                             </span>
+                                    -->
+                                </span>
+                                <select th:if="${session.user.userId} == ${topic.user.userId} or ${session.user.isAdmin}"
+                                class="newVisibility" name="newVisibility" th:topic-id="${topic.topicId}">
+                                    <!--<option th:if="${topic.visibility.name() == 'PRIVATE'}" th:selected="selected"
+                                            disabled>Private</option>-->
+                                    <option value="PRIVATE" th:selected="${topic.visibility.name() == 'PRIVATE'}"
+                                    >Private
+                                    </option>
+                                    <option value="PUBLIC" th:selected="${topic.visibility.name() == 'PUBLIC'}"
+                                    >Public
+                                    </option>
+
+
+                                </select>
+                                <span th:if="${topic.visibility.name()=='PRIVATE'}">
+                                    <a href="#" style="margin-left: 15px"><span
+                                            class="glyphicon glyphicon-envelope"></span></a>
+                                </span>
+
+                                <span th:if="${session.user.userId} == ${topic.user.userId} or ${session.user.isAdmin}">
+
+                                    <a style="margin-left: 15px" th:topic-id-attr1="${topic.topicId}"
+                                       th:id="'span'+${topic.topicId}"
+                                       th:class="edit-topic-name">
+                                        <span class="glyphicon glyphicon-edit"></span></a>
+                                    <a th:href="@{/deleteTopic/{id}(id=${topic.topicId})}" style="margin-left: 15px"><span
+                                            class="glyphicon glyphicon-trash"></span></a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+
+                </div>
+
+                <!----------------- Coding for Trending Topics ----------------------->
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Trending Topics
+                    </div>
+                    <div class="panel-body" th:each="topic,i:${session.trendingTopics}">
+
+                        <div class="row">
+                            <form method="post" action="/changeSubscription">
+                                <input th:name="topicId" th:value="${topic.topicId}" style="display: none"/>
+                                <div class="col-md-2">
+                                    <img class="pic-class" th:src="@{${topic.user.photo}}" ;>
+                                </div>
+
+                                <div class="col-md-10">
+                                    <a href="#" th:text="${topic.topicName}"> Grails</a>
+                                    <table style="border-spacing:5%;width: 50%;">
+                                        <tr>
+                                            <th>
+                                                <font size=2px th:text="${topic.user.userName}"> @uday</font>
+                                            </th>
+
+                                            <th style="display:inline-block ;margin-left: 50px">
+                                                <font size=2px> Subscriptions</font>
+                                            </th>
+                                            <th>
+                                                <font size=2px> Posts</font>
+
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div th:unless="${topic.user.userName==session.user.userName}"
+                                                     th:with="topicId = ${topic.topicId}">
+                                                    <p th:if="${topic.subscribers.contains(session.user.userId)}">
+                                                        <button type="submit" name="btn" value="unsubscribe" style="margin-right:-50px;background-color: transparent; border: none"
+                                                                class="btn-a-link"><a>Unsubscribe</a></button>
+                                                    </p>
+                                                    <p th:unless="${topic.subscribers.contains(session.user.userId)}">
+                                                        <button type="submit" name="btn" value="subscribe"
+                                                                class="btn-a-link"
+                                                                style="margin-right:-50px;background-color: transparent; border: none"><a>Subscribe</a>
+                                                        </button>
+                                                    </p>
+                                                </div>
+                                            </td>
+
+                                            <td style="display:inline-block ;margin: 0px 150px 0px 50px">
+                                                <font size=2px style="color:blue" th:text="${topic.subscribers.size()}">
+                                                    50</font>
+                                            </td>
+                                            <td>
+                                                <font size=2px style="color:blue" th:text="${topic.resources.size()}">
+                                                    30</font>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                    <br>
+
+                                    <select name="newseriousness" id="newseriousness"
+                                            th:if="${topic.user.userId==session.user.userId}" disabled>
+                                        <option value="VERY_SERIOUS">Very Serious</option>
+                                        <option value="SERIOUS">Serious</option>
+                                        <option value="CASUAL">Casual</option>
+                                    </select>
+
+                                    <select name="newseriousness" id="newseriousness"
+                                            th:unless="${topic.user.userId==session.user.userId}">
+                                        <option value="VERY_SERIOUS">Very Serious</option>
+                                        <option value="SERIOUS">Serious</option>
+                                        <option value="CASUAL">Casual</option>
+                                    </select>
+
+
+                                    <span th:if="${topic.user.userId==session.user.userId}">
+                                        <select>
+                                            <option th:selected="${topic.visibility.name() == 'PRIVATE'}">Private
+                                            </option>
+                                            <option th:selected="${topic.visibility.name() == 'PUBLIC'}">Public
+                                            </option>
+                                        </select>
+
+                                        <span th:if="${topic.visibility.name()=='PRIVATE'}">
+
+                                            <a style="margin-left: 15px;"><span class="glyphicon glyphicon-envelope"></span></a>
+                                        </span>
+                                            <a style="margin-left: 15px;"><span class="glyphicon glyphicon-edit"></span></a>
+
+                                        <a style="margin-left: 15px;" th:href="@{/deleteTopic/{topicId}(topicId=${topic.topicId})}"><span
+                                                class="glyphicon glyphicon-trash"></span></a>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <hr>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <!--Coding for the panel "Inbox" from here-->
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Inbox
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <img class="pic-class" src="profile-icon.png" ;>
+                            </div>
+
+                            <div class="col-md-10">
+                                <a href="#">Uday Pratap Singh </a>
+
+                                <p>
+                                    To group many panels together, wrap a with class .panel-group a
+                                    round them. The .panel-group class clears the bottom-margin of each
+                                    panel: To group many panels together, wrap a with class
+                                </p>
+                                <a href="https://www.facebook.com">
+                                    <i class="fa fa-facebook-square" style="font-size:20px"></i>
+                                </a>
+                                <a href="https://www.twitter.com">
+                                    <i class="fa fa-twitter" style="font-size:20px"></i>
+                                </a>
+                                <a href="https://www.plus.google.com">
+                                    <i class="fa fa-google-plus" style="font-size:20px"></i>
+                                </a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="#">Download</a>&nbsp;
+                                <a href="#">View Full Site</a>&nbsp;
+                                <a href="#">Mark as read</a>&nbsp;
+                                <a href="#">View Post</a>
+                            </div>
+
+                        </div>
+                    </div>
+                    <br>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <img class="pic-class" src="profile-icon.png" ;>
+                            </div>
+
+                            <div class="col-md-10">
+                                <a href="#">Uday Pratap Singh </a>
+
+                                <p>
+                                    To group many panels together, wrap a with class .panel-group a
+                                    round them. The .panel-group class clears the bottom-margin of each
+                                    panel: To group many panels together, wrap a with class
+                                </p>
+                                <a href="www.facebook.com">
+                                    <i class="fa fa-facebook-square" style="font-size:20px"></i>
+                                </a>
+                                <a href="www.twitter.com">
+                                    <i class="fa fa-twitter" style="font-size:20px"></i>
+                                </a>
+                                <a href="www.plus.google.com">
+                                    <i class="fa fa-google-plus" style="font-size:20px"></i>
+                                </a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="#">Download</a>&nbsp;
+                                <a href="#">View Full Site</a>&nbsp;
+                                <a href="#">Mark as read</a>&nbsp;
+                                <a href="#">View Post</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--Coding for "Create Topic" panel here-->
+
+                <div class="modal fade" id="myModal1" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Create Topic</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post" action="/createTopic">
+                                    Name:* <input type="text" id="topicName" title="enter at least one letter" name="topicName" placeholder="Topic Name"
+                                                  style="position:relative;margin-left:40%;">
+                                    <br><br>
+                                    Visibility:* <select name="visibility" style="position:relative;margin-left:40%;">
+                                    <option name="public">Public</option>
+                                    <option name="private">Private</option>
+                                </select>
+                                    <br><br>
+                                    <button type="submit" style="position:relative; margin-left:48%;">Save</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!------------------------------- Send invitation -------------------------->
+
+                <div class="modal fade" id="myModal2" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Send Invitation</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/sendemail" method="get" id="invite">
+
+                                    Email:* <input type="email" name="recEmail" placeholder="Email"
+                                                   style="position:relative;margin-left:40%;">
+                                    <br><br>
+                                    Topic:* <select style="position:relative;margin-left:40%;" name="topicId">
+                                    <option th:each="topic, iterStat : ${session.allUserTopics}"
+                                            th:if="${topic.visibility.name()=='PRIVATE'}"
+                                            th:text="${topic.topicName}" th:value="${topic.topicId}">Topic
+                                    </option>
+                                </select>
+                                    <br><br>
+                                    <button type="submit" style="position:relative; margin-left:48%;">Invite</button>
+                                </form>
+                                <!--<input name="topicId" th:value="${topic.topicId}" style="display: none" form="invite"/>-->
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!--Coding for "Share link" panel here-->
+
+
+                <div class="modal fade" id="myModal3" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Share Link</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form action="saveLinkResources" method="get">
+                                    Link:* <input type="url"
+                                                  style="position:relative;margin-left:40%;" name="url">
+                                    <br><br>
+                                    Description:* <textarea cols="22" rows=3 placeholder="Description"
+                                                            name="description"
+                                                            style="position:relative;margin-left:32%;"></textarea>
+                                    <br><br>
+                                    Topic:* <select style="position:relative;margin-left:40%;" name="resourceDropdown">
+
+                                    <option th:each="topic, iterStat : ${session.allUserTopics}"
+                                            th:text="${topic.topicName}" th:value="${topic.topicName}">Topic
+                                    </option>
+                                </select>
+                                    <br><br>
+                                    <button type="submit" style="position:relative; margin-left:48%;">Share</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!--Coding for "Share document" panel here-->
+
+                <div class="modal fade" id="myModal4" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Share Document</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/saveDocumentResources" method="post" enctype="multipart/form-data">
+                                    Document:* <input type="file" style="position:relative;margin-left:40%;"
+                                                      id="fileForDownload" name="fileForDownload">
+                                    <br><br>
+                                    Description:* <textarea cols="22" rows=3 placeholder="Description" id="description"
+                                                            name="description"
+                                                            style="position:relative;margin-left:32%;"></textarea>
+                                    <br><br>
+                                    Topic:*
+                                    <select style="position:relative;margin-left:40%;" name="resourceDropdown">
+
+                                        <option th:each="topic, iterStat : ${session.allUserTopics}"
+                                                th:text="${topic.topicName}" th:value="${topic.topicName}">Topic
+                                        </option>
+                                    </select>
+                                    <br><br>
+                                    <button type="submit" style="position:relative; margin-left:48%;">Share</button>
+                                </form>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<div>
+
+</div>
+
+<div th:unless="${session.user!=null}">
+    <script th:inline="javascript">
+        //alert("Please login first...")
+        window.location.href = "/";
+    </script>
+</div>
+</body>
+</html>

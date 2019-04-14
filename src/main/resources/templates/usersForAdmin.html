@@ -1,0 +1,380 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+
+
+    <!--For bootstrap, import:-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!--For icons, import:-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script th:src="@{'/javascripts/validate.js'}"></script>
+    <style>
+        .bottom-part{
+            padding-left: 5%;
+            padding-right: 5%;
+        }
+        .form-control{
+            /* float: right; */
+            max-width: 60%;
+        }
+        .btn{
+            float: right;
+        }
+        .pic-class{
+            width:80px;
+            height:80px;
+        }
+        .dropdown{
+            float: right;
+        }
+        .panel-body{
+            padding-left: 3%;
+            padding-right: 3%;
+        }
+        #table-row1{
+                 tab-size: 4;
+        }
+    </style>
+
+</head>
+<body>
+
+<!--Top part of page-->
+<div class="top-box-border">
+    <nav class="navbar" style="border: 2px solid; border-radius: 10px;">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/dashboard">Link Sharing</a>
+            </div>
+
+            <span class="navbar-form navbar-right">
+        <input type="text" class="form-control" placeholder="search">
+        <button type="submit" class="glyphicon glyphicon-search" style=" margin-left: -30px; background-color: transparent; border: none;"></button>
+        &nbsp;&nbsp;
+        <span class="glyphicon glyphicon-comment" data-toggle="modal" data-target="#myModal1" title="CreateTopic"></span>
+        &nbsp;&nbsp;
+        <span class="glyphicon glyphicon-envelope" data-toggle="modal" data-target="#myModal2" title="SendInvitation"></span>
+        &nbsp;&nbsp;
+        <span class="glyphicon glyphicon-paperclip" data-toggle="modal" data-target="#myModal3" title="ShareLink"></span>
+        &nbsp;&nbsp;
+        <span class="fa fa-file-text" data-toggle="modal" data-target="#myModal4" title="ShareDocument"></span>
+        &nbsp;&nbsp;
+        <span>
+            <img th:src="${session.user.photo}" height="20px" width="20px" class="avatar img-circle"/>
+        </span>
+        
+        
+    <span>
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style="background-color: transparent; border: none;">
+        <span th:text="${session.user.firstName}"></span>
+    <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+
+      <li><a href="/userProfile">Profile</a></li>
+      <li><a href="#">Topics</a></li>
+      <li><a href="#">Posts</a></li>
+      <li><a href="/logoutUser">Logout</a></li>
+    </ul>
+  
+          </span>
+        </span>
+        </div>
+    </nav>
+</div>
+
+
+<div class="row" style="width: 90%; margin: 0px auto;">
+
+    <div class="col-lg-12" style="background-color: #edeeef; padding: 10px; border-top-right-radius: 8px;
+    border-top-left-radius: 8px;">
+        <form name="adminForm" action="" method="post">
+        <div class="col-lg-6">Users</div>
+
+        <div class="col-lg-2">
+            <select name="selectUsers" id="selectUsers" onchange="usersOnSelection(this.value)" value="${value}">
+                <option name="allUsers" id="allUsers" value="allUsers">All Users</option>
+                <option name="active" id="active" value="true">Active</option>
+                <option name="deActive" id="deactive" value="false">Inactive</option>
+            </select>
+        </div>
+
+        <div class="col-lg-4">
+            <input type="text" class="" placeholder="search" />
+                <span class="glyphicon glyphicon-search" style="display: inline-block; margin-left: -30px; background-color: transparent; border: none;"></span>
+            <input type="submit" name="search" value="Search" style="margin-left: 20px;">
+        </div>
+        </form>
+    </div> 
+
+
+    <div>
+     <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Id
+            <span>
+                <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="/sortIdByAscendingOrder">Ascending</a></li>
+                    <li><a href="/sortIdByDescendingOrder">Descending</a></li>
+                </ul>
+            </div>
+            </span>
+        </th>
+        <th>Username
+            <span>
+                <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="/sortUsernameByA-ZOrder">A-Z</a></li>
+                    <li><a href="/sortUsernameByZ-AOrder">Z-A</a></li>
+                </ul>
+            </div>
+            </span>
+        </th>
+        <th>Email
+            <span>
+                <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="/sortEmailByA-ZOrder">A-Z</a></li>
+                    <li><a href="/sortEmailByZ-AOrder">Z-A</a></li>
+                </ul>
+            </div>
+            </span>
+        </th>
+        <th>Firstname
+            <span>
+                <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="/sortFirstnameByA-ZOrder">A-Z</a></li>
+                    <li><a href="/sortFirstnameByZ-AOrder">Z-A</a></li>
+                </ul>
+            </div>
+            </span>
+        </th>
+        <th>Lastname
+            <span>
+                <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="sortLastnameByA-ZOrder">A-Z</a></li>
+                    <li><a href="sortLastnameByZ-AOrder">Z-A</a></li>
+                </ul>
+            </div>
+            </span>
+        </th>
+        <th>Active
+            <span>
+                <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="/sortActiveByYesOrder">Yes</a></li>
+                    <li><a href="/sortActiveByNoOrder">No</a></li>
+                </ul>
+            </div>
+            </span>
+        </th>
+        <th>Manage
+            <span>
+                <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="/sortManageByActivateOrder">Activate</a></li>
+                    <li><a href="/sortManageByDectivateOrder">Deactivate</a></li>
+                </ul>
+                </div>
+            </span>
+        </th>
+      </tr>
+    </thead>
+    <tbody id="tableBody" name="tableBody">
+      <tr th:each="user, iterStat : ${users.content} " th:unless="${user.isAdmin}">
+          <td th:text="${user.userId}"></td>
+          <td th:text="${user.userName}"></td>
+          <td th:text="${user.email}"></td>
+          <td th:text="${user.firstName}"></td>
+          <td th:text="${user.lastName}"></td>
+          <td th:text="${user.isActive}?'Yes':'No'"></td>
+          <td>
+              <span th:if="${user.isActive}">
+                   <a th:id="${user.userId}" th:href="@{/deactivateUser/{id}(id=${user.userId})}">Deactivate</a>
+              </span>
+              <span th:id="${user.userId}" th:unless="${user.isActive}">
+                  <a th:id="${user.userId}" th:href="@{/activateUser/{id}(id=${user.userId})}">Activate</a>
+              </span>
+          </td>
+      </tr>
+    </tbody>
+  </table>
+        <hr/>
+        <ul class="nav nav-pills">
+
+            <li class="nav-item" th:each="i:${#numbers.sequence(0,users.totalPages - 1)}">
+                <a th:href="@{/usersRecord(page=${i})}" th:text="${i}" class="nav-link"></a>
+            </li>
+        </ul>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+<div class="modal fade" id="myModal2" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Send Invitation</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/sendemail" method="get">
+                            Email:* <input type="text" name="recEmail" placeholder="Email" style="position:relative;margin-left:40%;">
+                            <br><br>
+                            Topic:* <select style="position:relative;margin-left:40%;">
+                            <option>Topic</option>
+                            <option>Topic 1</option>
+                        </select>
+                            <br><br>
+                            <button type="submit" style="position:relative; margin-left:48%;">Invite</button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="modal fade" id="myModal3" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Share Link</h4>
+                        </div>
+                        <div class="modal-body">
+                            Link:* <input type="text" placeholder="Email" style="position:relative;margin-left:40%;">
+                            <br><br>
+                            Description:* <textarea cols="22" rows=3  placeholder="Description" style="position:relative;margin-left:32%;"></textarea>
+                            <br><br>
+                            Topic:* <select style="position:relative;margin-left:40%;">
+                            <option>Topic</option>
+                            <option>Topic 1</option>
+                        </select>
+                            <br><br>
+                            <button type="submit" style="position:relative; margin-left:48%;">Share</button>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!--Coding for "Share document" panel here-->
+            <!--Coding for "Share document" panel here-->
+            <div class="modal fade" id="myModal4" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Share Document</h4>
+                        </div>
+                        <div class="modal-body">
+                            Document:* <input type="file" style="position:relative;margin-left:40%;">
+                            <br><br>
+                            Description:* <textarea cols="22" rows=3  placeholder="Description" style="position:relative;margin-left:32%;"></textarea>
+                            <br><br>
+                            Topic:* <select style="position:relative;margin-left:40%;">
+                            <option>Topic</option>
+                            <option>Topic 1</option>
+                        </select>
+                            <br><br>
+                            <button type="submit" style="position:relative; margin-left:48%;">Share</button>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!--Coding for "Create Topic" panel here-->
+
+            <div class="modal fade" id="myModal1" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Create Topic</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form method="get" action="/createtopic">
+                            Name:* <input type="text" name= "tname" placeholder="Topic Name" style="position:relative;margin-left:40%;">
+                            <br><br>
+                            Visibility:* <select name="visibility" style="position:relative;margin-left:40%;">
+                            <option name="public">Public</option>
+                            <option name="private">Private</option>
+                        </select>
+                            <br><br>
+                            <button type="submit" style="position:relative; margin-left:48%;">Save</button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
+
+        </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<!--<script>
+    function usersOnSelection(parameter) {
+        var fetch = $.ajax({
+            url: "/showRecordsBySelected",
+            data: {"value":parameter},
+            method: "POST"
+        });
+        fetch.done(function (users) {
+            //console.log(users)
+        })
+    }
+</script>-->

@@ -1,0 +1,317 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+
+
+    <!--For bootstrap, import:-->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+
+    <style>
+
+
+        .bottom-part{
+            padding-left: 5%;
+            padding-right: 5%;
+        }
+        .form-control{
+            /* float: right; */
+            max-width: 60%;
+        }
+       
+        .pic-class{
+            width:80px;
+            height:80px;
+        }
+        .dropdown{
+            float: right;
+        }
+        .panel-body{
+            padding-left: 3%;
+            padding-right: 3%;
+        }
+    </style>
+
+</head>
+<body>
+
+<!--Top part of page-->
+<div class="top-box-border">
+    <nav class="navbar" style="border: 2px solid; border-radius: 10px;">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/dashboard">Link Sharing</a>
+            </div>
+
+            <span class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="search" />
+                <button type="submit" class="glyphicon glyphicon-search" style=" margin-left: -30px; background-color: transparent; border: none;"></button>
+                
+                <span>
+                    <img th:src="${session.user.photo}" height="20px" width="20px" class="avatar img-circle"/>
+                </span>
+                <span>
+                    <button class="" type="button" data-toggle="dropdown" style="background-color: transparent; border: none;">
+                        <span th:text="${session.user.firstName}"></span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="/editProfile">Edit Profile</a></li>
+                        <li><a href="/logoutUser">Logout</a></li>
+                    </ul>
+                </span>
+            </span>
+        </div>
+    </nav>
+</div>
+
+
+
+<!--Bototm part of page-->
+<div class="bottom-part">
+
+    <div class="row">
+        <div class="col-md-6">
+
+            <!--Coding for the panel "Recent shares" from here-->
+            <div class="panel panel-default">
+                <!-- <div class="panel-heading">
+                    Recent Shares
+
+                </div> -->
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <img class="pic-class" th:src="${session.user.photo}">
+
+                        </div>
+
+                        <div class="col-md-10">
+                            <a href="#" th:text="${session.user.firstName} + ' ' + ${session.user.lastName}"></a>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <font size=2px> @uday 5 mins</font>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <font size=2px> Subscriptions</font>
+                                    </td>
+                                    <td>
+                                        <font size=2px> Topics</font>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <font size=2px style="color:blue"> 50</font>
+                                    </td>
+                                    <td>
+                                        <font size=2px style="color:blue"> 30</font>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!--Coding for "Subscriptions" panel here-->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Topics                   
+                </div>
+                <div class="panel-body row col-md-10" style="padding: 10px 40px; border: 1px solid #e8eaed; width: 100%; margin-left: 1px;">
+                     <div>
+                        <a href="#"> Grails</a>
+                        <span style="display: inline-block; margin-left: 200px;">Subscriptions</span>
+                        <span style="display: inline-block; float: right;">Post</span>
+                    </div>
+                    
+                      
+
+                        <div>
+                            
+                            <select>
+                                <option>Serious</option>
+                            </select>
+                            
+                            <span class="glyphicon glyphicon-envelope"></span>
+                            <span style="display: inline-block; margin-left: 180px;">
+                            <a href="#">50</a>
+                            <a href="#" style="margin-left: 170px; display: inline-block;">30</a>
+                            </span>
+                        </div>
+
+                        
+
+                        <div style="margin-top: 40px;">
+                        <a href="#"> Grails</a>
+                        <span style="display: inline-block; margin-left: 200px;">Subscriptions</span>
+                        <span style="display: inline-block; float: right;">Post</span>
+                        </div>
+                    
+                      
+
+                        <div>
+                            
+                            <a>Subscribe</a>
+                            
+                            
+                            <span style="display: inline-block; margin-left: 205px;">
+                            <a href="#">50</a>
+                            <a href="#" style="margin-left: 170px; display: inline-block;">30</a>
+                            </span>
+                        </div>
+                  
+                </div>
+                
+            </div>
+
+           
+
+
+
+            <div class="panel panel-default" style="margin-top: 160px;">
+                <div class="panel-heading">
+                    Subscriptions                   
+                </div>
+                <div class="panel-body row col-md-10" style="padding: 10px 40px; border: 1px solid #e8eaed; width: 100%; margin-left: 1px;">
+                     <div>
+                        <a href="#"> Grails</a>
+                        <span style="display: inline-block; margin-left: 200px;">Subscriptions</span>
+                        <span style="display: inline-block; float: right;">Post</span>
+                    </div>
+                    
+                      
+
+                        <div>
+                            
+                            <select>
+                                <option>Serious</option>
+                            </select>
+                            
+                            <span class="glyphicon glyphicon-envelope"></span>
+                            <span style="display: inline-block; margin-left: 180px;">
+                            <a href="#">50</a>
+                            <a href="#" style="margin-left: 170px; display: inline-block;">30</a>
+                            </span>
+                        </div>
+
+
+                        <div style="margin-top: 50px;">
+                        <a href="#"> Grails</a>
+                        <span style="display: inline-block; margin-left: 200px;">Subscriptions</span>
+                        <span style="display: inline-block; float: right;">Post</span>
+                    </div>
+                    
+                      
+
+                        <div>
+                            
+                            <select>
+                                <option>Serious</option>
+                            </select>
+                            
+                            <span class="glyphicon glyphicon-envelope"></span>
+                            <span style="display: inline-block; margin-left: 180px;">
+                            <a href="#">50</a>
+                            <a href="#" style="margin-left: 170px; display: inline-block;">30</a>
+                            </span>
+                        </div>
+
+                        
+
+                        
+                  
+                </div>
+                
+            </div>
+
+
+
+
+
+
+            
+
+        </div>
+
+
+
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span>Posts</span>
+                    <span style="float: right;">    
+                        <input type="text" name="txtSearch" placeholder="search" />
+                        <button type="submit" class="glyphicon glyphicon-search" style=" margin-left: -30px; background-color: transparent; border: none;"></button>
+                    </span>
+                </div>
+                <div class="panel-body">
+                    
+                    <div class="col-md-10">
+                        <a href="#"> Grails</a>
+                        <p style="height: 40px; width: 100%; overflow: hidden;">
+                            To group many panels together, wrap a with class .panel-group a
+                                round them. The .panel-group class clears the bottom-margin of each
+                                panel: To group many panels together, wrap a with class
+                        </p>
+                         <a href="www.facebook.com">
+                                <i class="fa fa-facebook-square" style="font-size:20px"></i>
+                            </a>
+                            <a href="www.twitter.com">
+                                <i class="fa fa-twitter" style="font-size:20px"></i>
+                            </a>
+                            <a href="www.plus.google.com">
+                                <i class="fa fa-google-plus" style="font-size:20px" ></i>
+                            </a>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="#">Download</a>&nbsp;
+                            <a href="#">View Full Site</a>&nbsp;
+                            <a href="#">Mark as read</a>&nbsp;
+                            <a href="#">View Post</a>
+
+                    </div>
+                </div>
+                <div class="panel-body">
+                   
+                    <div class="col-md-10">
+                        <a href="#"> Grails</a>
+                        <p style="height: 40px; width: 100%; overflow: hidden;">
+                            To group many panels together, wrap a with class .panel-group a
+                                round them. The .panel-group class clears the bottom-margin of each
+                                panel: To group many panels together, wrap a with class
+                        </p>
+                         <a href="www.facebook.com">
+                                <i class="fa fa-facebook-square" style="font-size:20px"></i>
+                            </a>
+                            <a href="www.twitter.com">
+                                <i class="fa fa-twitter" style="font-size:20px"></i>
+                            </a>
+                            <a href="www.plus.google.com">
+                                <i class="fa fa-google-plus" style="font-size:20px" ></i>
+                            </a>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="#">Download</a>&nbsp;
+                            <a href="#">View Full Site</a>&nbsp;
+                            <a href="#">Mark as read</a>&nbsp;
+                            <a href="#">View Post</a>
+
+                    </div>
+            </div>
+        </div>
+        
+    </div>
+
+
+        
+    </div>
+</div>
+</body>
+</html>

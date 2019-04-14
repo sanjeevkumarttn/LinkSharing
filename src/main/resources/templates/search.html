@@ -1,0 +1,347 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Search</title>
+    <!--For bootstrap, import:-->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!--For icons, import:-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="SearchStylesheet.css">
+
+
+    <link th:href="@{/stylesheets/bootswatch.css}" rel="stylesheet">
+    <link th:href="@{/stylesheets/search.css}" rel="stylesheet">
+    <script th:src="@{/javascripts/search.js}" ></script>
+
+</head>
+
+<body STYLE="background-color: white; font-size: medium ">
+	<!-- Top part of page -->
+	<div class="top-box-border">
+		<nav class="navbar" style="border: 2px solid; border-radius: 10px;">
+			<div class="container">
+				<div class="">
+					<a class="" href="/dashboard" style="color: #1f76b0">Link Sharing</a>
+				</div>
+				<span class="navbar-form navbar-right">
+					<input type="text" class="form-control" placeholder="search">
+					<button type="submit" class="glyphicon glyphicon-search" style="height:32px;width:32px;"></button>
+        			&nbsp;&nbsp;
+        			<span class="glyphicon glyphicon-paperclip" data-toggle="modal" data-target="#myModal3"></span>
+        			&nbsp;&nbsp;
+        			<span class="fa fa-file-text" data-toggle="modal" data-target="#myModal4"></span>
+        			&nbsp;&nbsp;
+        			<span class="glyphicon glyphicon-user"></span>
+    				<span>
+    					<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style="background-color: transparent; border: none;">
+                            <span th:text="${session.user.userName}">Username</span>
+    					<span class="caret"></span></button>
+    					<ul class="dropdown-menu">
+    						<li><a href="/userProfile">Profile</a></li>
+      						<li><a href="/logoutUser">Logout</a></li>
+    					</ul>
+    				</span>
+				</span>
+			</div>
+		</nav>
+	</div>
+
+	<!-- Bottom part of page -->
+    <!--SHARE LINK-->
+    <div class="modal fade" id="myModal3" role="dialog">
+        <div class="modal-dialog card border-primary mb-3">
+            <div class="modal-content">
+                <div class="modal-header card-header">
+                    <div class="modal-title card-title">Share Link</div>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <form action="#" th:action="@{/createLinkResourceFromPostPage}" th:object="${resource}" method="post">
+                    <div class="modal-body card-body">
+                        Link:*<br> <input type="text" placeholder="Enter link" required name="urlPath"
+                                          th:field="*{urlPath}"><br>
+                        <br>
+                        Description:*<br> <textarea cols="22" rows=3 placeholder="Description" required name="description"
+                                                    th:field="*{description}"></textarea><br>
+                        <br>
+                        Topic:*
+                        <select name="resourcetopic" required>
+                            <option th:each="topic : ${session.topicSubscribed}" th:value="${topic.topicId}"
+                                    th:text="${topic.topicName}">Topic
+                            </option>
+                        </select>
+                        <br><br><br>
+                        <button type="submit" class="btn btn-primary">Share</button>
+                    </div>
+                    <div class="modal-footer card-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <!--SHARE DOCUMENT-->
+    <div class="modal fade" id="myModal4" role="dialog">
+        <div class="modal-dialog card border-primary mb-3">
+            <div class="modal-content">
+                <div class="modal-header card-header">
+                    <div class="modal-title">Share Document</div>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <form action="#" th:action="@{/createDocumentResourceFromPostPage}" th:object="${resource}" method="post"
+                      enctype="multipart/form-data">
+                    <div class="modal-body">
+                        Document:* <br><input type="file" placeholder="Enter file" required name="path">
+                        <br><br>
+                        Description:* <br><textarea cols="22" rows=3 placeholder="Description" required name="description"
+                                                    th:field="*{description}"></textarea>
+                        <br><br>
+                        Topic:* <select name="resourcetopic" required>
+                        <option th:each="topic : ${topicSubscribed}" th:value="${topic.topicId}"
+                                th:text="${topic.topicName}">Topic
+                        </option>
+                    </select>
+                        <br><br>
+                        <button type="submit">Share</button>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="container-fluid" id="topics-main-div">
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-6 col-lg-5 col-xl-5">
+                <div id="search-trending-topics-div">
+                    <!--------------------------------Trending topics--------------------------------------------------->
+                    <div id="dashboard-trending-topics-div">
+                        <div class="card border-primary mb-3">
+                            <h5 class="card-header " id="card-header-dashboard-trending-topics">Trending Topics</h5>
+                            <div class="container-fluid dashboard-trending-topics-card"
+                                 th:each="topic,i:${trendingTopics}">
+                                <div>
+                                    <form method="post" action="/changeSubscription">
+
+                                        <input th:name="topicId" th:value="${topic.topicId}" style="display: none"/>
+                                        <div class="row card-body">
+                                            <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 user-img-div">
+                                                <img class="user-img" th:src="@{'/'+${topic.user.photo}}">
+                                            </div>
+                                            <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
+                                                <!--<span class="card-title"><a href="#" th:class="'old-topic'+${topic.topicId}" th:text="${topic.topicName}">Grails</a></span>-->
+                                                <div class="old-topic-name" th:classappend="'old-topic-name'+${topic.topicId}"><a style="color: #106bea" th:href="@{/topicPage/{id}(id=${topic.topicId})}" th:class="'old-topic'+${topic.topicId}" th:text="${topic.topicName}">Grails</a></div>
+                                                <div class="new-topic-name" th:classappend="'new-topic-name'+${topic.topicId}" style="display: none">
+                                                    <div class="form-inline my-2 my-lg-0">
+                                                        <input class="new-topic-name-text form-control mr-sm-2" type="text" th:placeholder="${topic.topicName}">
+                                                        <div th:class="newtname-msg"></div>
+                                                        <button th:topic-id-attr="${topic.getTopicId()}"class="save-new-topic-name btn btn-primary my-2 my-sm-0" type="button">Save</button>
+                                                        <button type="button" class="close-topic-edit btn btn-primary my-2 my-sm-0">Close</button>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                                        <p th:text="${topic.user.userName}">@username</p>
+                                                        <div th:unless="${topic.user.userName==session.user.userName}"
+                                                             th:with="topicId = ${topic.topicId}">
+                                                            <p th:if="${topic.subscribers.contains(session.user.userId)}">
+                                                                <button type="" name="btn" value="unsubscribe" style="background-color: transparent; border: none"
+                                                                        class="btn-a-link"><a>Unsubscribe</a></button>
+                                                            </p>
+                                                            <p th:unless="${topic.subscribers.contains(session.user.userId)}">
+                                                                <button type="" name="btn" value="subscribe" style="background-color: transparent; border: none"
+                                                                        class="btn-a-link"><a>Subscribe</a></button>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4 col-sm-4 col-md-5 col-lg-5 col-xl-5">
+                                                        <p>Subscriptions</p>
+                                                        <p th:text="${topic.subscribers.size()}">50</p>
+                                                    </div>
+                                                    <div class="col-4 col-sm-4 col-md-3 col-lg-3 col-xl-3">
+                                                        <p>Post</p>
+                                                        <p th:text="${topic.resources.size()}">30</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row topic-type" id="dashboard-trending-topic-subscription-type">
+                                            <div th:if="${topic.subscribers.contains(session.user.userId)}">
+                                                <div class="btn-group"
+                                                     th:unless="${topic.user.userName==session.user.userName}">
+                                            <span th:each="subs : ${session.subscriptionDetails}">
+                                                <span th:if="${subs.topic.topicId==topic.topicId}">
+                                                    <span th:with="seriousness = ${subs.seriousness}">
+
+                                                        <select type="submit" class="btn btn-secondary" th:topic-id="${topic.topicId}" th:classappend="newseriousness" name="newseriousness">
+                                                            <option th:selected="${seriousness==session.seriousnessTypes[1]}"
+                                                                    value="SERIOUS">serious
+                                                            </option>
+                                                            <option th:selected="${seriousness==session.seriousnessTypes[0]}"
+                                                                    value="CASUAL">casual
+                                                            </option>
+                                                            <option th:selected="${seriousness==session.seriousnessTypes[2]}"
+                                                                    value="VERY_SERIOUS">very
+                                                                serious
+                                                            </option>
+                                                        </select>
+
+                                                    </span>
+                                                </span>
+                                            </span>
+                                                </div>
+                                            </div>
+                                            <div th:unless="${topic.subscribers.contains(session.user.userId)}">
+                                                <div class="btn-group">
+                                                    <select th:unless="${topic.user.userName==session.user.userName}"
+                                                            type="button" class="btn btn-secondary" th:name="newseriousness"
+                                                            th:placeholder="seriousness" required>
+                                                        <option value="SERIOUS">serious</option>
+                                                        <option value="CASUAL">casual</option>
+                                                        <option value="VERY_SERIOUS">very serious</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="btn-group">
+                                                <div th:if="${topic.user.userName==session.user.userName ||session.user.isAdmin}">
+                                                    <select type="button" class="btn btn-secondary" th:topic-id="${topic.topicId}" th:id="trendsvisibility+${topic.topicId}" th:classappend="newvisibility">
+                                                        <option th:selected="${topic.visibility==topic.visibility.PRIVATE}" value="PRIVATE">
+                                                            Private
+                                                        </option>
+                                                        <option th:selected="${topic.visibility==topic.visibility.PUBLIC}" value="PUBLIC">
+                                                            Public
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div th:unless="${topic.user.userName==session.user.userName || session.user.isAdmin}">
+                                                    <span class="btn btn-secondary" th:text="${topic.visibility}"></span>
+                                                </div>
+                                            </div>
+                                            <span th:if="${topic.visibility==topic.visibility.PRIVATE}"><a href="#"><i
+                                                    class="fa fa-envelope-o" th:id="trendsvisibility+${topic.topicId}"
+                                                    style="font-size: 1.5rem"></i></a></span>
+                                            <span th:if="${topic.user.userId==session.user.userId || session.user.isAdmin}">
+                                             <a th:href="@{/deleteTopic/{id}(id=${topic.topicId})}"><i class="fa fa-trash" style="color: #106bea"></i></a>
+                                             <span th:topic-id-attr1="${topic.getTopicId()}" th:class="edit-topic-name"><i style="color: #106bea" class="fa fa-pencil-square-o" aria-hidden="true"
+                                                                                                                           ></i></span>
+                                    </span>
+                                        </div>
+                                    </form>
+                                </div>
+                                <br>
+                                <br>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-------------------------------------------------------------------------------------->
+                <div class="card border-primary mb-3">
+                    <h5 class="card-header" id="card-header-search-top-posts">Top Posts</h5>
+                    <div class="container-fluid">
+                        <div th:each=" resource : ${resources}" class="container-fluid topicpage-posts-card">
+                            <div class="row topicpage-posts-div-body card-body">
+                                <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 user-img-div">
+                                    <img th:src="'/'+${resource.user.photo}" class="user-img">
+                                </div>
+                                <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                            <div><h5 th:text="${resource.user.userName}">UserName</h5></div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                            <div><a style="color: #106bea" href="#" th:text="${resource.topic.topicName}">Topic name</a></div>
+                                        </div>
+                                    </div>
+                                    <p class="card-text" th:text="${resource.description}">With supporting text below as a natural lead-in to additional
+                                        content.With supporting text below as a natural lead-in to additional
+                                        content.With supporting text below as a natural lead-in to additional
+                                        content.With supporting text below as a natural lead-in to additional
+                                        content.</p>
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 social-links">
+                                            <a href="#"><i style="color: #106bea" class="fa fa-facebook-official" aria-hidden="true"></i></a>
+                                            <a href="#"><i style="color: #106bea" class="fa fa-google-plus" aria-hidden="true"></i></a>
+                                            <a href="#"><i style="color: #106bea" class="fa fa-tumblr" aria-hidden="true"></i></a>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 topics-posts-options">
+                                            <a style="color: #106bea" th:if="${resource.resourceType.name()=='DOCUMENT'}" th:href="'/'+${resource.urlPath}">Download</a>
+                                            <a style="color: #106bea" th:if="${resource.resourceType.name()=='LINK'}" th:href="${resource.urlPath}" TARGET="_blank">View Full Site</a>
+                                            <a style="color: #106bea" href="#">Mark as Read</a>
+                                            <a style="color: #106bea" href="#">View Post</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!---------------------------------------------------------------------------->
+
+            <div class="col-12 col-sm-12 col-md-6 col-lg-7 col-xl-7">
+                <div class="card border-primary mb-3">
+                    <h5 class="card-header" id="card-header-search">Search for "<b>text</b>"</h5>
+                    <div class="container-fluid">
+
+                        <div th:each=" resource : ${resources}" class="container-fluid topicpage-posts-card">
+                            <div class="row topicpage-posts-div-body card-body">
+                                <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 user-img-div">
+                                    <img th:src="'/'+${resource.user.photo}" class="user-img">
+                                </div>
+                                <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                            <div><h5 th:text="${resource.user.userName}">UserName</h5></div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                            <div><a href="#" th:text="${resource.topic.topicName}" style="color: #106bea">Topic name</a></div>
+                                        </div>
+                                    </div>
+                                    <p class="card-text" th:text="${resource.description}">With supporting text below as a natural lead-in to additional
+                                        content.With supporting text below as a natural lead-in to additional
+                                        content.With supporting text below as a natural lead-in to additional
+                                        content.With supporting text below as a natural lead-in to additional
+                                        content.</p>
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 ">
+                                            <a href="#" style="color: #106bea" class="fa fa-facebook-square" aria-hidden="true"></a>
+                                            <a href="#" style="color: #106bea" class="fa fa-google-plus" aria-hidden="true"></a>
+                                            <a href="#" style="color: #106bea" class="fa fa-twitter" aria-hidden="true"></a>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 topics-posts-options" >
+                                            <a style="color: #106bea" th:if="${resource.resourceType.name()=='DOCUMENT'}" th:href="'/'+${resource.urlPath}">Download</a>
+                                            <a style="color: #106bea" th:if="${resource.resourceType.name()=='LINK'}" th:href="${resource.urlPath}" TARGET="_blank">View Full Site</a>
+                                            <a style="color: #106bea" href="#">Mark as Read</a>
+                                            <a style="color: #106bea" href="#">View Post</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</body>
+</html>

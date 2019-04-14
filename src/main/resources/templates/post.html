@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Post/Resources</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script th:src="@{'/javascripts/rating.js'}"></script>
+    <script th:src="@{'/javascripts/editResourceDesc.js'}"></script>
+
+
+    <style>
+        .bottom-part {
+            padding-left: 5%;
+            padding-right: 5%;
+        }
+
+        .pic-class {
+            width: 80px;
+            height: 80px;
+        }
+    </style>
+    <!--For icons, import:-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="top-box-border">
+    <nav class="navbar" style="border: 2px solid; border-radius: 10px;">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/dashboard">Link Sharing</a>
+            </div>
+
+            <span class="navbar-form navbar-right">
+        <input type="text" class="form-control" placeholder="search">
+        <button type="submit" class="glyphicon glyphicon-search"
+                style=" margin-left: -30px; background-color: transparent; border: none;"></button>
+        <span class="glyphicon glyphicon-paperclip" data-toggle="modal" data-target="#myModal3"
+              title="ShareLink"></span>
+        &nbsp;&nbsp;
+        <span class="fa fa-file-text" data-toggle="modal" data-target="#myModal4" title="ShareDocument"></span>
+        &nbsp;&nbsp;
+        <span class="">
+             <img th:src="${session.user.photo}" height="20px" width="20px" class="avatar img-circle"/>
+        </span>
+        
+       
+    <span>
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"
+            style="background-color: transparent; border: none;">
+         <span th:text="${session.user.firstName}"></span>
+    <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+
+      <li><a href="/editProfile">Profile</a></li>
+      <li><a href="/logoutUser">Logout</a></li>
+    </ul>
+  
+          </span>
+        </span>
+        </div>
+    </nav>
+
+</div>
+
+<div class="bottom-part">
+
+    <div class="row">
+        <div class="col-md-6">
+
+            <div class="panel panel-default" th:each="resource, i : ${resourcesSubscribed} ">
+                <!-- <div th:text="${resource}"></div>-->
+                <div class="panel-body" >
+                    <span >
+                    <div class="row" >
+                        <div class="col-md-2">
+                            <img class="pic-class" th:src="${resource.user.photo}">
+                        </div>
+                        <div class="col-md-10">
+                            <div>
+                                <a href="#" th:text="${resource.user.firstName + ' ' + resource.user.lastName}"></a>
+                                <a href="#" style="float: right;" th:text="${resource.topic.topicName}"></a><br>
+                                <p th:text="${resource.user.userName}" style="display: inline-block"></p>
+                                <p style="float: right; display: inline-block"
+                                   th:text="${resource.topic.createdAt}"></p>
+                            </div>
+                            <!--<div>
+                                <p style="float: right;" th:text="${resource.topic.createdAt}"></p>
+                             </div>-->
+                            <div style="float: right;width: 100%;height: 10px">
+                                <div style="float: right;" th:id="${resource.resourceId}">
+                                        <span style="display: inline-block; padding: 10px;">
+                                            <p class="glyphicon glyphicon-heart-empty star"
+                                               th:classappend="star+${resource.resourceId}" id="1" value="1"></p></span>
+                                    <span style="display: inline-block; padding: 10px;">
+                                        <p class="glyphicon glyphicon-heart-empty star"
+                                           th:classappend="star+${resource.resourceId}" id="2" value="2"></p></span>
+                                    <span style="display: inline-block; padding: 10px;">
+                                        <p class="glyphicon glyphicon-heart-empty star"
+                                           th:classappend="star+${resource.resourceId}" id="3" value="3"></p></span>
+                                    <span style="display: inline-block; padding: 10px;">
+                                        <p class="glyphicon glyphicon-heart-empty star"
+                                           th:classappend="star+${resource.resourceId}" id="4" value="4"></p></span>
+                                    <span style="display: inline-block; padding: 10px;">
+                                        <p class="glyphicon glyphicon-heart-empty star"
+                                           th:classappend="star+${resource.resourceId}" id="5" value="5"></p></span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <br>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p th:text="${resource.description}"></p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="https://www.facebook.com">
+                                <i class="fa fa-facebook-square" style="font-size:20px"></i>
+                            </a>
+                            <a href="https://www.twitter.com">
+                                <i class="fa fa-twitter" style="font-size:20px"></i>
+                            </a>
+                            <a href="https://www.plus.google.com">
+                                <i class="fa fa-google-plus" style="font-size:20px"></i>
+                            </a>
+                            <span style="margin-left: 250px; display: inline-block"></span>
+                            <a href="#">Delete</a>&nbsp;
+                            <a th:if="${resource.user.userId==session.user.userId || session.user.isAdmin}" href="#"
+                               data-toggle="modal" data-target="#myModalEdit" th:resource-id="${resource.resourceId}"
+                               th:resource-desc="${resource.description}" th:resource-type="${resource.resourceType}"
+                               th:resource-topic="${resource.topic.topicName}" th:resource-path="${resource.urlPath}"
+                               class="edit-topic-desc">
+                                <input id="resourceId" name="resourceId" th:value="${resource.resourceId}"
+                                       form="editform" style="display: none;"/>
+                                Edit</a>
+
+                            <a th:if="${resource.resourceType.name() == 'DOCUMENT'}"
+                               th:href="${resource.urlPath}">Download</a>
+
+
+                            <a th:unless="${resource.resourceType.name() == 'DOCUMENT'}"
+                               th:href="${resource.urlPath}" th:target="_blank">View Full Site</a>
+
+                        </div>
+                    </div>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Trending topics
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <img class="pic-class" src="images/profile-icon.png">
+                        </div>
+                        <div class="col-md-10">
+                            <div>
+                                <a href="#">Uday Pratap Singh</a>
+                                <a href="#" style="float: right;">Grails</a>
+                            </div>
+                            <table style="border-spacing:5%;width: 60%;">
+                                <tr>
+                                    <th>
+                                        <font size=2px> @uday</font>
+                                    </th>
+
+                                    <th>
+                                        <font size=2px> Subscriptions</font>
+                                    </th>
+                                    <th>
+                                        <font size=2px> Posts</font>
+
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a href="#"><font size=2px style="color:blue"> Unsubscribe</font></a>
+                                    </td>
+                                    <td>
+                                        <font size=2px style="color:blue"> 50</font>
+                                    </td>
+                                    <td>
+                                        <font size=2px style="color:blue"> 30</font>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <img class="pic-class" src="images/profile-icon.png">
+                        </div>
+                        <div class="col-md-10">
+                            <a href="#"> Grails</a>
+                            <table style="border-spacing:5%;width: 50%;">
+                                <tr>
+                                    <th>
+                                        <font size=2px> @uday</font>
+                                    </th>
+
+                                    <th>
+                                        <font size=2px> Subscriptions</font>
+                                    </th>
+                                    <th>
+                                        <font size=2px> Posts</font>
+
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a href="#"><font size=2px style="color:blue"> Unsubscribe</font></a>
+                                    </td>
+                                    <td>
+                                        <font size=2px style="color:blue"> 50</font>
+                                    </td>
+                                    <td>
+                                        <font size=2px style="color:blue"> 30</font>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br>
+                            <select>
+                                <option>Serious</option>
+                            </select>
+                            &nbsp;&nbsp;
+                            <select>
+                                <option>Private</option>
+                                <option>Delete</option>
+                                <option>Edit</option>
+                            </select>
+                            &nbsp;&nbsp;
+                            <span class="glyphicon glyphicon-envelope"></span>
+                            &nbsp;&nbsp;
+                            <span class="glyphicon glyphicon-edit"></span>
+                            &nbsp;&nbsp;
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="modal fade" id="myModal3" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Share Link</h4>
+            </div>
+            <div class="modal-body">
+                <form action="saveResources" method="get">
+                    Link:* <input type="text" name="url" placeholder="url" style="position:relative;margin-left:40%;">
+                    <br><br>
+                    Description:* <textarea cols="22" rows=3 name="description" placeholder="Description"
+                                            style="position:relative;margin-left:32%;"></textarea>
+                    <br><br>
+                    Topic:* <select name="resourceDropdown" style="position:relative;margin-left:40%;">
+                    <option value="Topic">Topic</option>
+
+                    <option value="<%=topic.getTopicName()%>"><%=topic.getTopicName()%></option>
+
+                    <option value="none"></option>
+
+                </select>
+                    <br><br>
+                    <button type="submit" style="position:relative; margin-left:48%;">Share</button>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="myModal4" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Share Document</h4>
+            </div>
+            <div class="modal-body">
+                Document:* <input type="file" style="position:relative;margin-left:40%;">
+                <br><br>
+                Description:* <textarea cols="22" rows=3 placeholder="Description"
+                                        style="position:relative;margin-left:32%;"></textarea>
+                <br><br>
+                Topic:* <select name="resourceDropdown" style="position:relative;margin-left:40%;">
+                <option value="Topic">Topic</option>
+
+                <option value="<%=topic.getTopicName()%>"><%=topic.getTopicName()%></option>
+
+                <option value="none"></option>
+
+            </select>
+                <br><br>
+                <button type="submit" style="position:relative; margin-left:48%;">Share</button>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!--EDIT RESOURCE-->
+<div class="modal fade" id="myModalEdit" role="dialog">
+    <div class="modal-dialog card border-primary mb-3">
+        <div class="modal-content">
+            <div class="modal-header card-header">
+                <div class="modal-title">Edit Post</div>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <form id="editform" action="#" th:action="@{/editResource}" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    Path <br><span id="edit-path"> </span>
+                    <br><br>
+                    Description:* <br><textarea cols="22" rows=3 id="edit-desc" placeholder="Description" required
+                                                name="description"></textarea>
+                    <br><br>
+                    Topic:*
+                    <div id="edit-topic"></div>
+                    <br><br>
+                    <button type="submit">Update Description</button>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+
+</body>
+</html>
+
+
+

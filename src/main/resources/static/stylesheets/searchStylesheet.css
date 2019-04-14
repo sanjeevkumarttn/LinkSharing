@@ -1,0 +1,22 @@
+.bottom-part{
+            padding-left: 5%;
+            padding-right: 5%;
+}
+
+.form-control{
+            max-width: 60%;
+}
+
+.dropdown{
+        float: right;
+}
+
+.pic-class{
+            width:80px;
+            height:80px;
+}
+
+.panel-body{
+            padding-left: 3%;
+            padding-right: 3%;
+}

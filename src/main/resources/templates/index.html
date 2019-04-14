@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <link th:href="@{'/stylesheets/style.css'}" rel="stylesheet"/>
+    <script th:src="@{'/javascripts/validate.js'}"></script>
+
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style type="text/css">
+
+        .window-header{
+            background-color: #e0e1e2;
+            padding: 10px;
+            border-top-right-radius: 8px;
+            border-top-left-radius: 8px;
+            border-bottom: 0px solid;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container-fluid">
+
+    <div class="row header">
+
+        <div style="" class="col-lg-8 col-sm-12 col-md-6 col-xl-9 navbar-header">
+            <a href="/" style="font-size: 25px; ">Link Sharing</a></div>
+        <div  style="padding: 10px 10px;" class="col-lg-4 col-sm-12 col-md-6 col-xl-3 search-box">
+            <form name="searchForm">
+                <button id="btn1" class="fa fa-search icon" ></button>
+                <input type="text" id="search" name="search" placeholder="Search" >
+                <button type="clear" id="btn2" class="fa fa-close icon" onclick=""></button>
+            </form>
+        </div>
+    </div>
+
+  <!--  <div class="panel" th:if="${session.loginMessage}?true:false">
+
+    </div>-->
+    <div class="panel-body bg-secondary text-center">
+        <span th:text="${message}"></span>
+    </div>
+
+    <div class="inner-container row">
+
+        <div class="inner-container-left col-xl-7 col-lg-7 col-md-12 col-sm-12 col-12">
+            <div class="inner-container-left-top" style="border: 1px solid #d4d5d6;">
+                <div class="window-header">Recent Shares</div>
+
+                <div class="row" style="padding: 6px;">
+                    <div class="col-4 col-sm-3 col-md-2"><img src="images/profile-icon.png" style="width: 100%; height: 100%; border: 1px solid;"></div>
+                    <div class="col-8 col-sm-9 col-md-10" style="height: 80%; width: 80%; margin-left: -15px;">
+                        <div style="height: 20%; width: 100%;">Uday Pratap Singh</div>
+                        <div style="height: 50px; width: 100%; overflow: hidden;">
+                            <p>If you need to support legacy browsers, or if you are hindered by the :not selector's limitation (it only accepts a simple selector as an argument) then you can use another technique:
+                                Define a rule that has greater scope than what you intend and then "revoke" it conditionally, limiting its scope to what you do intend:</p>
+                        </div>
+                        <div style="height: 20%; width: 100%;">
+                            <a href="www.facebook.com">
+                                <i class="fa fa-facebook-square" style="font-size:20px"></i>
+                            </a>
+                            <a href="www.twitter.com">
+                                <i class="fa fa-twitter" style="font-size:20px"></i>
+                            </a>
+                            <a href="www.plus.google.com">
+                                <i class="fa fa-google-plus" style="font-size:20px" ></i>
+                            </a>
+                            <a href="#" style="float: right; margin-right: 20px;">View post</a>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row" style="padding: 6px;">
+                    <div class="col-4 col-sm-3 col-md-2"><img src="images/profile-icon.png" style="width: 100%; height: 100%; border: 1px solid;"></div>
+                    <div class="col-8 col-sm-9 col-md-10" style="height: 80%; width: 80%; margin-left: -15px">
+                        <div style="height: 20%; width: 100%;">Uday Pradtap Singh</div>
+                        <div style="height: 50px; width: 100%; overflow: hidden;">
+                            <p>If you need to support legacy browsers, or if you are hindered by the :not selector's limitation (it only accepts a simple selector as an argument) then you can use another technique:
+                                Define a rule that has greater scope than what you intend and then "revoke" it conditionally, limiting its scope to what you do intend:</p></div>
+                        <div style="height: 20%; width: 100%;">
+                            <a href="www.facebook.com">
+                                <i class="fa fa-facebook-square" style="font-size:20px"></i>
+                            </a>
+                            <a href="www.twitter.com">
+                                <i class="fa fa-twitter" style="font-size:20px"></i>
+                            </a>
+                            <a href="www.plus.google.com">
+                                <i class="fa fa-google-plus" style="font-size:20px" ></i>
+                            </a>
+                            <a href="#" style="float: right; margin-right: 20px;">View post</a>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="inner-container-left-bottom" style="border: 1px solid #d4d5d6;">
+                <div class="window-header ">
+                    <span>Top post</span>
+                    <select name="period">
+                        <option>Today</option>
+                        <option>1 week</option>
+                        <option>1 month</option>
+                        <option>1 year</option>
+                    </select>
+                </div>
+
+                <div class="row" style="padding: 6px;">
+                    <div class="col-4 col-sm-3 col-md-2">
+                        <img src="images/profile-icon.png" style="width: 100%; height: 100%; border: 1px solid;">
+                    </div>
+                    <div class="col-8 col-sm-9 col-md-10" style="height: 80%; width: 80%; margin-left: -15px;">
+                        <div style="height: 20%; width: 100%;">Uday Pradtap Singh</div>
+                        <div style="height: 50px; width: 100%; overflow: hidden;">
+                            <p>If you need to support legacy browsers, or if you are hindered by the :not selector's limitation (it only accepts a simple selector as an argument) then you can use another technique:
+                                Define a rule that has greater scope than what you intend and then "revoke" it conditionally, limiting its scope to what you do intend:</p>
+                        </div>
+                        <div style="height: 20%; width: 100%;">
+                            <a href="www.facebook.com">
+                                <i class="fa fa-facebook-square" style="font-size:20px"></i>
+                            </a>
+                            <a href="www.twitter.com">
+                                <i class="fa fa-twitter" style="font-size:20px"></i>
+                            </a>
+                            <a href="www.plus.google.com">
+                                <i class="fa fa-google-plus" style="font-size:20px" ></i>
+                            </a>
+                            <a href="#" style="float: right; margin-right: 20px;">View post</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="inner-container-right col-xl-5  col-lg-5 col-md-12 col-sm-12 col-12">
+            <div class="inner-container-right-top" style="border: 1px solid #d4d5d6;">
+
+
+                <div class="window-header">Login
+                </div>
+
+
+                <div style="padding: 10px;">
+                    <form name="formLogin" class="form-group" th:action="@{/userLogin}" method="post">
+                        <div class="form-group row col-lg-12">
+                            <span class="col-lg-4 col-md-6 col-sm-12" pattern="[^\s]+" title="please enter the valid username">Username<sp>*</sp></span>
+                            <input class="col-lg-8 col-md-6 col-sm-12" type="text" name="userName" required>
+                        </div>
+                        <div class="form-group row col-lg-12">
+                            <span class="col-lg-4 col-md-6 col-sm-12">Password<sp>*</sp></span>
+                            <input class="col-lg-8 col-md-6 col-sm-12" type="Password" name="password" required>
+                        </div>
+                        <div class="form-group row col-lg-12">
+                            <div class="col-lg-9 col-md-6 col-9" style=" padding: 10px 20px;"><a href="/forgotPassword" style="float: right;">Forgot Password</a></div>
+                            <div class="col-lg-3 col-md-6 col-3" style=" padding-right: 11px;"><input type="submit" name="login" value="Login" style=" float: right; margin-right: -10px;" /></div>
+                        </div>
+                    </form>
+                </div>
+
+
+            </div>
+
+
+
+
+
+            <div class="inner-container-right-bottom" style="border: 1px solid #d4d5d6;">
+
+
+                <div class="window-header">Register
+                </div>
+
+
+                <div style="padding: 10px;">
+                    <form name="formLogin" class="form-group" th:action="@{/register}" th:object="${user}" method="post" enctype="multipart/form-data">
+
+                        <div class="form-group row col-lg-12">
+                            <span class="col-lg-5 col-md-6 col-sm-12" >First Name<sp>*</sp></span>
+                            <input class="col-lg-7 col-md-6 col-sm-12" type="text" pattern="[a-zA-Z]{3,15}" title="minimum 3 digits and only letters allowed" name="firstName" id="firstName" th:field="*{firstName}" required>
+                        </div>
+                        <div class="form-group row col-lg-12">
+                            <span class="col-lg-5 col-md-6 col-sm-12">Last Name<sp>*</sp></span>
+                            <input class="col-lg-7 col-md-6 col-sm-12" pattern="[a-zA-Z\s]+" title="only letters and white spaces allowed" type="text" name="lastName" id="lastName" th:field="*{lastName}" required>
+                        </div>
+                        <div class="form-group row col-lg-12">
+                            <span class="col-lg-5 col-md-6 col-sm-12" >Email<sp>*</sp></span>
+                            <input class="col-lg-7 col-md-6 col-sm-12" type="email" name="email" id="email" th:field="*{email}" required>
+                        </div>
+                        <div class="form-group row col-lg-12">
+                            <span class="col-lg-5 col-md-6 col-sm-12" >Username<sp>*</sp></span>
+                            <input class="col-lg-7 col-md-6 col-sm-12" type="text" pattern="[^\s]+" title="white spaces not allowed" name="userName" id="userName" th:field="*{userName}" required>
+                        </div>
+                        <div class="form-group row col-lg-12">
+                            <span class="col-lg-5 col-md-6 col-sm-12">Password<sp>*</sp></span>
+                            <input class="col-lg-7 col-md-6 col-sm-12" type="Password" id="password" name="password" th:field="*{password}" required>
+                        </div>
+                        <div class="form-group row col-lg-12">
+                            <span class="col-lg-5 col-md-6 col-sm-12">Confirm password<sp>*</sp></span>
+                            <input class="col-lg-7 col-md-6 col-sm-12" type="Password" id="confirmPassword" name="confirmPassword" required>
+                        </div>
+                        <div class="form-group row col-lg-12">
+                            <span class="col-lg-5 col-md-6 col-sm-12" >Photo</span>
+                            <input class="col-lg-7 col-md-6 col-sm-12" style="margin-left: -15px;" type="file" name="image" id="image" />
+                        </div>
+                        <div class="form-group row col-lg-12">
+
+                            <div style=" padding-right: 11px;"><input type="submit" name="register" value="Register" style="" /></div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+</body>
+</html>
+<!--
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            type : "GET",
+            url : "/demo",
+            data : null,
+            success: function(data){
+                console.log(data);
+            }
+        });
+    })
+</script>-->

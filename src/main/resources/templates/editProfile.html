@@ -1,0 +1,271 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+
+
+    <!--For bootstrap, import:-->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script th:src="@{'/javascripts/validateUserName_editProfile.js'}"></script>
+    
+
+    <style>
+
+
+        .bottom-part{
+            padding-left: 5%;
+            padding-right: 5%;
+        }
+        .form-control{
+            /* float: right; */
+            max-width: 60%;
+        }
+       
+        .pic-class{
+            width:80px;
+            height:80px;
+        }
+        .dropdown{
+            float: right;
+        }
+        .panel-body{
+            padding-left: 3%;
+            padding-right: 3%;
+        }
+    </style>
+
+</head>
+<body>
+
+<!--Top part of page-->
+<div class="top-box-border">
+    <nav class="navbar" style="border: 2px solid; border-radius: 10px;">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/dashboard">Link Sharing</a>
+            </div>
+
+            <span class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="search" />
+                <button type="submit" class="glyphicon glyphicon-search" style=" margin-left: -30px; background-color: transparent; border: none;"></button>
+                
+                <span>
+                    <img th:src="${session.user.photo}" height="20px" width="20px" class="avatar img-circle"/>
+                </span>
+                <span>
+                    <button class="" type="button" data-toggle="dropdown" style="background-color: transparent; border: none;">
+                         <span th:text="${session.user.firstName}"></span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="/userProfile">Profile</a></li>
+                        <li><a href="/logoutUser">Logout</a></li>
+                    </ul>
+                </span>
+            </span>
+        </div>
+    </nav>
+</div>
+
+<div class="panel-body bg-secondary text-center">
+    <span th:text="${message}"></span>
+</div>
+
+<!--Bototm part of page-->
+<div class="bottom-part">
+
+    <div class="row">
+        <div class="col-md-6">
+
+            <!--Coding for the panel "Recent shares" from here-->
+            <div class="panel panel-default">
+                <!-- <div class="panel-heading">
+                    Recent Shares
+
+                </div> -->
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <img class="pic-class" src="profile-icon.png";>
+                        </div>
+
+                        <div class="col-md-10">
+                            <a href="#" th:text="${session.user.firstName} + ' ' + ${session.user.lastName}"></a>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <font size=2px> @uday 5 mins</font>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <font size=2px> Subscriptions</font>
+                                    </td>
+                                    <td>
+                                        <font size=2px> Topics</font>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <font size=2px style="color:blue"> 50</font>
+                                    </td>
+                                    <td>
+                                        <font size=2px style="color:blue"> 30</font>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!--Coding for "Topics" panel here-->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Topics
+
+                     <span style="float: right;">    
+                        <input type="text" name="txtSearch" placeholder="search" />
+                        <button type="submit" class="glyphicon glyphicon-search" style=" margin-left: -30px; background-color: transparent; border: none;"></button>
+                    </span>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <img class="pic-class" src="profile-icon.png";>
+                        </div>
+
+                        <div class="col-md-10">
+                            <input type="text" name="search"><input type="submit" name="btnsave" value="Save">
+                            <table style="border-spacing:5%;">
+                                <tr>
+                                    <td>
+                                        <font size=2px> @uday 5 mins</font>
+                                    </td>
+
+                                    <td>
+                                        <font size=2px> Subscriptions</font>
+                                    </td>
+                                    <td>
+                                        <font size=2px> Posts</font>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a href="#"><font size=2px style="color:blue"> Unsubscribe</font></a>
+                                    </td>
+                                    <td>
+                                        <font size=2px style="color:blue"> 50</font>
+                                    </td>
+                                    <td>
+                                        <font size=2px style="color:blue"> 30</font>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br>
+                            <select>
+                                <option>Serious</option>
+                            </select>
+                            &nbsp;&nbsp;
+                            <select>
+                                <option>Private</option>
+                                <option>Delete</option>
+                                <option>Edit</option>
+                            </select>
+                            &nbsp;&nbsp;
+                            <span class="glyphicon glyphicon-envelope"></span>
+                            &nbsp;&nbsp;
+                            <span class="glyphicon glyphicon-edit"></span>
+                            &nbsp;&nbsp;
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                
+            </div>
+
+           
+            
+
+        </div>
+
+        <div class="col-md-6">
+            <!--Coding for the panel "Recent shares" from here-->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Profile
+                </div>
+                <div class="panel-body">
+                    <div style="padding: 10px;">
+
+                        <form name="formProfile" class="form-group" th:action="@{/editUserInfo}" method="post" enctype="multipart/form-data">
+                            <div class="form-group row col-lg-12">
+                                <span class="col-lg-5 col-md-6 col-sm-12" >First name<sup>*</sup></span>
+                                <input class="col-lg-7 col-md-6 col-sm-12" type="text" name="firstName" th:placeholder="${session.user.firstName}">
+                            </div>
+                           <div class="form-group row col-lg-12">
+                                <span class="col-lg-5 col-md-6 col-sm-12" >Last name<sup>*</sup></span>
+                                <input class="col-lg-7 col-md-6 col-sm-12" type="text" name="lastName" th:placeholder="${session.user.lastName}">
+                            </div>
+                            <div class="form-group row col-lg-12">
+                                <span class="col-lg-5 col-md-6 col-sm-12" >Username<sup>*</sup></span>
+                                <input class="col-lg-7 col-md-6 col-sm-12" type="text" id="userName" name="userName" th:placeholder="${session.user.userName}">
+                            </div>
+
+                            <div class="form-group row col-lg-12">
+                                <span class="col-lg-5 col-md-6 col-sm-12" >Photo</span>
+                                <input class="col-lg-7 col-md-6 col-sm-12" style="margin-left: -15px;" type="file" name="image">
+                            </div>
+                             <div class="form-group row col-lg-12">
+                                
+                                <div style=" padding-right: 11px;"><input type="submit" name="update" value="Update" />
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>            
+        </div>
+
+
+        <div class="col-md-6">
+            <!--Coding for the panel "Recent shares" from here-->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Profile
+                </div>
+                <div class="panel-body">
+                    <div style="padding: 10px;">
+                        <form name="formChangePassword" class="form-group" action="/resetPasswordInEditProfile" method="post">
+
+                           
+                            <div class="form-group row col-lg-12">
+                                <span class="col-lg-5 col-md-6 col-sm-12">Password<sp>*</sp></span>
+                                <input class="col-lg-7 col-md-6 col-sm-12" type="Password" name="password" id="password" required>
+                            </div>
+                            <div class="form-group row col-lg-12">
+                                <span class="col-lg-5 col-md-6 col-sm-12">Confirm password<sp>*</sp></span>
+                                <input class="col-lg-7 col-md-6 col-sm-12" type="Password" name="confirmPassword" id="confirmPassword" required>
+                            </div>
+                           
+                            <div class="form-group row col-lg-12">
+                                
+                                <div style=" padding-right: 11px;"><input type="submit" name="update" value="Update" style="" /></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
